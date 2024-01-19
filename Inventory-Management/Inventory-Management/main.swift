@@ -7,24 +7,43 @@
 
 import Foundation
 
-var cerealStock = 100
-var milkStock = 100
-var syrupStock = 100
-var cupStock = 100
+var cerealStock: Double = 100.0
+var milkStock: Double = 100.0
+var syrupStock: Double = 100.0
+var cupStock: Double = 100.0
 
-var cerealCart = 0
-var milkCart = 0
-var syrupCart = 0
-var cupCart = 0
+var cerealCart: Double = 0.0
+var milkCart: Double = 0.0
+var syrupCart: Double = 0.0
+var cupCart: Double = 0.0
+
+var cerealCost: Double = 4.99
+var milkCost: Double = 4.99
+var syrupCost: Double = 3.99
+var cupCost: Double = 2.99
 
 var adminId: String = ""
+
+var total: Double = 0.0
+
+let TAX: Double = 0.0925
+
+func amountRestock(item: String) -> Double{
+    print("How many units of \(item) would you like to restock?: ")
+    if let quantityStr = readLine(), let quantityNum = Double(quantityStr){
+        print("Restocked \(Int(quantityNum)) units of \(item)\n")
+        return quantityNum
+    } else{
+        return -1.0
+    }
+}
 
 func addItem(){
     print("What would you like to add to cart? (Enter number of selection\n" +
           "1. Cereal\n" +
           "2. Milk\n" +
           "3. Syrup\n" +
-          "4. Cup\n")
+          "4. Cup")
     var item: String = ""
     
     if let itemStr = readLine(){
@@ -39,30 +58,56 @@ func addItem(){
             item = "Cup"
         default:
             print("Invalid Input. Please select valid number.\n")
+            mainMenu()
         }
     }
     
     print("How many \(item)(s) would you like to add to your cart?: ")
-    if let quantityStr = readLine(), let quantityNum = Int(quantityStr){
+    if let quantityStr = readLine(), let quantityNum = Double(quantityStr){
         switch item{
         case "Cereal":
-            cerealStock -= quantityNum
-            cerealCart += quantityNum
+            if quantityNum <= cerealStock{
+                cerealStock -= quantityNum
+                cerealCart += quantityNum
+                total += cerealCart * cerealCost
+            } else{
+                print("Not enough cereal in stock!\n")
+                mainMenu()
+            }
         case "Milk":
-            milkStock -= quantityNum
-            milkCart += quantityNum
+            if quantityNum <= milkStock{
+                milkStock -= quantityNum
+                milkCart += quantityNum
+                total += milkCart * milkCost
+            } else{
+                print("Not enough milk in stock!\n")
+                mainMenu()
+            }
         case "Syrup":
-            syrupStock -= quantityNum
-            syrupCart += quantityNum
+            if quantityNum <= syrupStock{
+                syrupStock -= quantityNum
+                syrupCart += quantityNum
+                total += syrupCart * syrupCost
+            } else{
+                print("Not enough syrup in stock!\n")
+                mainMenu()
+            }
         case "Cup":
-            cupStock -= quantityNum
-            cupCart += quantityNum
+            if quantityNum <= cupStock{
+                cupStock -= quantityNum
+                cupCart += quantityNum
+                total += cupCart * cupCost
+            } else{
+                print("Not enough cups in stock!\n")
+                mainMenu()
+            }
         default:
             print("Invalid Input. Please select valid number.\n")
+            mainMenu()
         }
         
-        print("You have added \(quantityNum) \(item)(s) to your cart!")
-        print("Current total is: \n")
+        print("You have added \(Int(quantityNum)) \(item)(s) to your cart!")
+        print("Current total is: \(total)\n")
     } else{
         print("Invalid input. Please please input valid number.\n")
     }
@@ -73,7 +118,7 @@ func removeItem(){
           "1. Cereal\n" +
           "2. Milk\n" +
           "3. Syrup\n" +
-          "4. Cups\n")
+          "4. Cups")
     var item: String = ""
     
     if let itemStr = readLine(){
@@ -88,30 +133,56 @@ func removeItem(){
             item = "Cup"
         default:
             print("Invalid Input. Please select valid number.\n")
+            removeItem()
         }
     }
     
     print("How many \(item) would you like to remove from your cart? (Enter number of selection): ")
-    if let quantityStr = readLine(), let quantityNum = Int(quantityStr){
+    if let quantityStr = readLine(), let quantityNum = Double(quantityStr){
         switch item{
         case "Cereal":
-            cerealStock += quantityNum
-            cerealCart -= quantityNum
+            if quantityNum <= cerealCart{
+                cerealStock += quantityNum
+                cerealCart -= quantityNum
+                total -= quantityNum * cerealCost
+            } else{
+                print("Cannot remove more than what you have in your cart!\n")
+                mainMenu()
+            }
         case "Milk":
-            milkStock += quantityNum
-            milkCart -= quantityNum
+            if quantityNum <= milkCart{
+                milkStock += quantityNum
+                milkCart -= quantityNum
+                total -= quantityNum * milkCost
+            } else{
+                print("Cannot remove more than what you have in your cart!\n")
+                mainMenu()
+            }
         case "Syrup":
-            syrupStock += quantityNum
-            syrupCart -= quantityNum
+            if quantityNum <= syrupCart{
+                syrupStock += quantityNum
+                syrupCart -= quantityNum
+                total -= quantityNum * syrupCost
+            } else{
+                print("Cannot remove more than what you have in your cart!\n")
+                mainMenu()
+            }
         case "Cup":
-            cupStock += quantityNum
-            cupCart -= quantityNum
+            if quantityNum <= cupCart{
+                cupStock += quantityNum
+                cupCart -= quantityNum
+                total -= quantityNum * cupCost
+            } else{
+                print("Cannot remove more than what you have in your cart!\n")
+                mainMenu()
+            }
         default:
             print("Invalid Input. Please select valid number.\n")
+            mainMenu()
         }
         
         print("Removed \(quantityStr) from the cart!")
-        print("Current total is: \n")
+        print("Current total is: \(total)\n")
     } else{
         print("Invalid Input. Please select number.\n")
     }
@@ -122,21 +193,25 @@ func checkStock(){
           "1. Cereal\n" +
           "2. Milk\n" +
           "3. Syrup\n" +
-          "4. Cups\n")
+          "4. Cups")
     
     if let itemStr = readLine(){
         switch itemStr{
         case "1":
-            print("There are currently \(cerealStock) cereals in stock!\n")
+            print("There are currently \(Int(cerealStock)) cereal(s) in stock!\n")
         case "2":
-            print("There are currently \(milkStock) milk in stock!\n")
+            print("There are currently \(Int(milkStock)) milk(s) in stock!\n")
         case "3":
-            print("There are currently \(syrupStock) milk in stock!\n")
+            print("There are currently \(Int(syrupStock)) syrup(s) in stock!\n")
         case "4":
-            print("There are currently \(cupStock) milk in stock!\n")
+            print("There are currently \(Int(cupStock)) cup(s) in stock!\n")
         default:
-            print("Invalid Input.")
+            print("Invalid Input.\n")
+            mainMenu()
         }
+    } else{
+        print("Invalid option!")
+        mainMenu()
     }
 }
 
@@ -155,35 +230,34 @@ func adminMenu(){
                       "1. Cereal\n" +
                       "2. Milk\n" +
                       "3. Syrup\n" +
-                      "4. Cups\n")
+                      "4. Cups")
                 
                 if let item = readLine(){
-                    print("How many units of cup would you like to restock?: \n")
-                    if let quantityStr = readLine(), let quantityNum = Int(quantityStr){
-                        switch item{
-                        case "1":
-                            cerealStock += quantityNum
-                        case "2":
-                            milkStock += quantityNum
-                        case "3":
-                            syrupStock += quantityNum
-                        case "4":
-                            cupStock += quantityNum
-                        default:
-                            print("Invalid Input.")
-                        }
+                    switch item{
+                    case "1":
+                        cerealStock += amountRestock(item: "Cereal")
+                    case "2":
+                        milkStock += amountRestock(item: "Milk")
+                    case "3":
+                        syrupStock += amountRestock(item: "Syrup")
+                    case "4":
+                        cupStock += amountRestock(item: "Cup")
+                    default:
+                        print("Invalid Input.")
+                        mainMenu()
                     }
                 } else{
                     print("Please choose an appropriate option!")
+                    mainMenu()
                 }
             case "2":
                 print("Summary Report:\n" +
-                      "Remaining cereals: \(cerealStock) items\n" +
-                      "Remaining milks: \(milkStock) items\n" +
-                      "Remaining syrups: \(syrupStock) items\n" +
-                      "Remaining cups: \(cupStock) items\n" +
-                      "Remaining Inventory: \(cerealStock + milkStock + syrupStock + cupStock) items\n" +
-                      "Total Sales: $0.0\n")
+                      "Remaining cereals: \(Int(cerealStock)) items\n" +
+                      "Remaining milks: \(Int(milkStock)) items\n" +
+                      "Remaining syrups: \(Int(syrupStock)) items\n" +
+                      "Remaining cups: \(Int(cupStock)) items\n" +
+                      "Remaining Inventory: \(Int(cerealStock + milkStock + syrupStock + cupStock)) items\n" +
+                      "Total Sales: $\(total)\n")
             case "3":
                 checkStock()
             case "4":
@@ -197,17 +271,32 @@ func adminMenu(){
         }
     } else{
         print("Invalid Admin ID!\n")
+        mainMenu()
     }
 }
 
 func checkout(){
     print("Thanks for shopping with us!\n" +
           "You purchases the following:\n" +
-          "Cereals: \(cerealCart)\n" +
-          "Milks: \(milkCart)\n" +
-          "Syrups: \(syrupCart)\n" +
-          "Cups: \(cupCart)\n" +
-          "Your grand total including tax (9.25%) is: 0.00")
+          "Cereals: \(Int(cerealCart))\n" +
+          "Milks: \(Int(milkCart))\n" +
+          "Syrups: \(Int(syrupCart))\n" +
+          "Cups: \(Int(cupCart))\n" +
+          "Your grand total including tax (9.25%) is: \(total + (total * TAX))")
+}
+
+func emptyCart(){
+    cerealStock += cerealCart
+    milkStock += milkCart
+    syrupStock += syrupCart
+    cupStock += cupCart
+    cerealCart = 0
+    milkCart = 0
+    syrupCart = 0
+    cupCart = 0
+    total = 0
+    
+    print("Cart Emptied\n")
 }
 
 func mainMenu(){
@@ -216,7 +305,8 @@ func mainMenu(){
           "2. Remove item for cart\n" +
           "3. Check if item is in stock\n" +
           "4. Admin Menu\n" +
-          "5. Checkout")
+          "5. Checkout\n" +
+          "6. Empty Cart")
     
     if let userInputStr = readLine(), let userInputNum = Int(userInputStr){
         switch userInputNum{
@@ -235,8 +325,11 @@ func mainMenu(){
             adminMenu()
         case 5:
             checkout()
+        case 6:
+            emptyCart()
+            mainMenu()
         default:
-            print("Please choose an appropriate option!")
+            print("Please choose an appropriate option!\n")
             mainMenu()
         }
     }
