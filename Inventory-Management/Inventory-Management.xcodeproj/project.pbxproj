@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33B9AF242B5ECC81006EAEDF /* CSV in Frameworks */ = {isa = PBXBuildFile; productRef = 33B9AF232B5ECC81006EAEDF /* CSV */; };
 		33FBA1712B51B942007F3D0C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA1702B51B942007F3D0C /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33B9AF242B5ECC81006EAEDF /* CSV in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +80,9 @@
 			dependencies = (
 			);
 			name = "Inventory-Management";
+			packageProductDependencies = (
+				33B9AF232B5ECC81006EAEDF /* CSV */,
+			);
 			productName = "Inventory-Management";
 			productReference = 33FBA16D2B51B942007F3D0C /* Inventory-Management */;
 			productType = "com.apple.product-type.tool";
@@ -106,6 +111,9 @@
 				Base,
 			);
 			mainGroup = 33FBA1642B51B942007F3D0C;
+			packageReferences = (
+				33B9AF222B5ECC81006EAEDF /* XCRemoteSwiftPackageReference "CSV" */,
+			);
 			productRefGroup = 33FBA16E2B51B942007F3D0C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -285,6 +293,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33B9AF222B5ECC81006EAEDF /* XCRemoteSwiftPackageReference "CSV" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yaslab/CSV.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33B9AF232B5ECC81006EAEDF /* CSV */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33B9AF222B5ECC81006EAEDF /* XCRemoteSwiftPackageReference "CSV" */;
+			productName = CSV;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 33FBA1652B51B942007F3D0C /* Project object */;
 }
